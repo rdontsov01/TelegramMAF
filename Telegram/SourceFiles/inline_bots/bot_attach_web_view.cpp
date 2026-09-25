@@ -1467,7 +1467,8 @@ void WebViewInstance::show(ShowArgs &&args) {
 			&& (attached->inAttachMenu || attached->inMainMenu));
 	const auto downloads = &_session->attachWebView().downloads();
 	_panelUrl = args.result.url;
-	_panel = Ui::BotWebView::Show({
+	File::LaunchUrl(_panelUrl);
+	/*_panel = Ui::BotWebView::Show({
 		.url = args.result.url,
 		.storageId = _session->local().resolveStorageIdBots(),
 		.title = std::move(title),
@@ -1479,13 +1480,15 @@ void WebViewInstance::show(ShowArgs &&args) {
 		.sameOrigin = args.result.sameOrigin,
 		.allowClipboardRead = allowClipboardRead,
 		.downloadsProgress = downloads->progress(_bot),
-	});
+	});*/
 	started(args.result.queryId);
 
 	if (const auto strong = PendingActivation.get()) {
 		if (strong == this) {
 			PendingActivation = nullptr;
-			_panel->requestActivate();
+			if (_panel) {
+				_panel->requestActivate();
+			}
 		}
 	}
 }
